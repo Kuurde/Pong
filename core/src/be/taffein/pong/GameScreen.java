@@ -19,10 +19,12 @@ public class GameScreen implements Screen {
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
     private OrthographicCamera camera;
+
     private Rectangle playerOne;
     private Rectangle playerTwo;
     private Rectangle ball;
-    private boolean goingRight;
+    private float directionX = -1;
+    private float directionY = -1;
 
     public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         this.batch = batch;
@@ -35,9 +37,7 @@ public class GameScreen implements Screen {
         this.shapeRenderer.setColor(Color.WHITE);
         this.shapeRenderer.setProjectionMatrix(camera.combined);
 
-        playerOne = new Rectangle(20, 480 / 2 - 80 / 2, 20, 80);
-        playerTwo = new Rectangle(760, 480 / 2 - 80 / 2, 20, 80);
-        ball = new Rectangle(800 / 2 - 5, 480 / 2 - 5, 10, 10);
+        initGame();
     }
 
     @Override
@@ -54,6 +54,7 @@ public class GameScreen implements Screen {
         renderShapes();
         handleInput();
         moveBall();
+        controlPlayerTwo();
     }
 
     @Override
@@ -81,6 +82,12 @@ public class GameScreen implements Screen {
 
     }
 
+    private void initGame() {
+        playerOne = new Rectangle(20, 480 / 2 - 80 / 2, 20, 80);
+        playerTwo = new Rectangle(760, 480 / 2 - 80 / 2, 20, 80);
+        ball = new Rectangle(800 / 2 - 5, 480 / 2 - 5, 10, 10);
+    }
+
     private void renderShapes() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.rect(playerOne.x, playerOne.y, playerOne.width, playerOne.height);
@@ -106,18 +113,37 @@ public class GameScreen implements Screen {
     }
 
     private void moveBall() {
-        if (goingRight) {
-            ball.x += BALL_SPEED * Gdx.graphics.getDeltaTime();
-        } else {
-            ball.x -= 300 * Gdx.graphics.getDeltaTime();
+        ball.x += directionX * BALL_SPEED * Gdx.graphics.getDeltaTime();
+        ball.y += directionY * BALL_SPEED * Gdx.graphics.getDeltaTime();
+
+        if (ball.overlaps(playerOne)) {
+            directionX = 1;
         }
 
         if (ball.overlaps(playerTwo)) {
-            goingRight = false;
+            directionX = -1;
         }
 
-        if (ball.overlaps(playerOne)) {
-            goingRight = true;
+        if (ball.y < 0) {
+            directionY = 1;
+        }
+
+        if (ball.y > 480) {
+            directionY = -1;
+        }
+
+        if (ball.x < 0 || ball.x > 800) {
+            ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
+        }
+    }
+
+    private void controlPlayerTwo() {
+        if (playerTwo.y > ball.y) {
+            playerTwo.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        if (playerTwo.y < ball.y) {
+            playerTwo.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
     }
 }
