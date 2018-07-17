@@ -25,11 +25,15 @@ public class GameScreen implements Screen {
     private Rectangle ball;
     private float directionX = -1;
     private float directionY = -1;
+    private int playerOneScore;
+    private int playerTwoScore;
 
     public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
         this.batch = batch;
         this.shapeRenderer = shapeRenderer;
         this.font = font;
+        this.font.setColor(Color.WHITE);
+        this.font.getData().setScale(2);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -55,6 +59,7 @@ public class GameScreen implements Screen {
         handleInput();
         moveBall();
         controlPlayerTwo();
+        drawScore();
     }
 
     @Override
@@ -86,6 +91,8 @@ public class GameScreen implements Screen {
         playerOne = new Rectangle(20, 480 / 2 - 80 / 2, 20, 80);
         playerTwo = new Rectangle(760, 480 / 2 - 80 / 2, 20, 80);
         ball = new Rectangle(800 / 2 - 5, 480 / 2 - 5, 10, 10);
+        playerOneScore = 0;
+        playerTwoScore = 0;
     }
 
     private void renderShapes() {
@@ -93,6 +100,12 @@ public class GameScreen implements Screen {
         shapeRenderer.rect(playerOne.x, playerOne.y, playerOne.width, playerOne.height);
         shapeRenderer.rect(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height);
         shapeRenderer.rect(ball.x, ball.y, ball.width, ball.height);
+
+        float lineX = 800 / 2 -4;
+        for (int i = 0; i < 480; i = i + 15) {
+            shapeRenderer.rect(lineX, i, 8, 8);
+        }
+
         shapeRenderer.end();
     }
 
@@ -132,7 +145,13 @@ public class GameScreen implements Screen {
             directionY = -1;
         }
 
-        if (ball.x < 0 || ball.x > 800) {
+        if (ball.x < 0) {
+            playerTwoScore++;
+            ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
+        }
+
+        if (ball.x > 800) {
+            playerOneScore++;
             ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
         }
     }
@@ -145,5 +164,14 @@ public class GameScreen implements Screen {
         if (playerTwo.y < ball.y) {
             playerTwo.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
+    }
+
+    private void drawScore() {
+        batch.begin();
+
+        font.draw(batch, String.valueOf(playerOneScore), 350, 450);
+        font.draw(batch, String.valueOf(playerTwoScore), 430, 450);
+
+        batch.end();
     }
 }
