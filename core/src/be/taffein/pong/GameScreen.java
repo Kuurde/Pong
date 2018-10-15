@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class GameScreen implements Screen {
     private static final int PLAYER_SPEED = 200;
     private static final int BALL_SPEED = 300;
+    private static final int Y_MIN = 0;
+    private static final int Y_MAX = 400;
 
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
@@ -24,7 +26,7 @@ public class GameScreen implements Screen {
     private Rectangle playerTwo;
     private Rectangle ball;
     private float directionX = -1;
-    private float directionY = -1;
+    private float directionY = -0;
     private int playerOneScore;
     private int playerTwoScore;
 
@@ -97,10 +99,17 @@ public class GameScreen implements Screen {
 
     private void renderShapes() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        // Draw player one
         shapeRenderer.rect(playerOne.x, playerOne.y, playerOne.width, playerOne.height);
+
+        // Draw player two
         shapeRenderer.rect(playerTwo.x, playerTwo.y, playerTwo.width, playerTwo.height);
+
+        // Draw ball
         shapeRenderer.rect(ball.x, ball.y, ball.width, ball.height);
 
+        // Draw field
         float lineX = 800 / 2 -4;
         for (int i = 0; i < 480; i = i + 15) {
             shapeRenderer.rect(lineX, i, 8, 8);
@@ -111,16 +120,16 @@ public class GameScreen implements Screen {
 
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            playerOne.y += 200 * Gdx.graphics.getDeltaTime();
-            if (playerOne.y > 400) {
-                playerOne.y = 400;
+            playerOne.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            if (playerOne.y > Y_MAX) {
+                playerOne.y = Y_MAX; // Make sure the player doesn't leave the field
             }
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             playerOne.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
-            if (playerOne.y < 0) {
-                playerOne.y = 0;
+            if (playerOne.y < Y_MIN) {
+                playerOne.y = Y_MIN; // Make sure the player doesn't leave the field
             }
         }
     }
@@ -130,6 +139,8 @@ public class GameScreen implements Screen {
         ball.y += directionY * BALL_SPEED * Gdx.graphics.getDeltaTime();
 
         if (ball.overlaps(playerOne)) {
+            System.out.println("player one y: " + playerOne.y);
+            System.out.println("ball y: " + ball.y);
             directionX = 1;
         }
 
@@ -137,12 +148,8 @@ public class GameScreen implements Screen {
             directionX = -1;
         }
 
-        if (ball.y < 0) {
-            directionY = 1;
-        }
-
-        if (ball.y > 480) {
-            directionY = -1;
+        if (ball.y < 0 || ball.y > 480) {
+            directionY *= -1; // Change y direction to keep ball in the field
         }
 
         if (ball.x < 0) {
@@ -163,6 +170,9 @@ public class GameScreen implements Screen {
 
         if (playerTwo.y < ball.y) {
             playerTwo.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
+            if (playerTwo.y > 400) {
+                playerTwo.y = 400;
+            }
         }
     }
 
