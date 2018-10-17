@@ -15,7 +15,8 @@ public class Pong extends Game {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
-		this.setScreen(new GameScreen(batch, shapeRenderer, font));
+//		this.setScreen(new GameScreen(batch, shapeRenderer, font));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -30,4 +31,16 @@ public class Pong extends Game {
 		font.dispose();
 		this.getScreen().dispose();
 	}
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
+
+    public BitmapFont getFont() {
+        return font;
+    }
 }

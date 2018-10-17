@@ -17,6 +17,7 @@ public class GameScreen implements Screen {
     private static final int Y_MIN = 0;
     private static final int Y_MAX = 400;
 
+    private Pong game;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private BitmapFont font;
@@ -30,10 +31,11 @@ public class GameScreen implements Screen {
     private int playerOneScore;
     private int playerTwoScore;
 
-    public GameScreen(SpriteBatch batch, ShapeRenderer shapeRenderer, BitmapFont font) {
-        this.batch = batch;
-        this.shapeRenderer = shapeRenderer;
-        this.font = font;
+    public GameScreen(Pong game) {
+        this.game = game;
+        this.batch = game.getBatch();
+        this.shapeRenderer = game.getShapeRenderer();
+        this.font = game.getFont();
         this.font.setColor(Color.WHITE);
         this.font.getData().setScale(2);
 
