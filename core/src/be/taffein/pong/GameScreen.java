@@ -139,13 +139,13 @@ public class GameScreen implements Screen {
         ball.y += directionY * BALL_SPEED * Gdx.graphics.getDeltaTime();
 
         if (ball.overlaps(playerOne)) {
-            System.out.println("player one y: " + playerOne.y);
-            System.out.println("ball y: " + ball.y);
             directionX = 1;
+            directionY = ((ball.y + 5) - (playerOne.y + 40)) / 40;
         }
 
         if (ball.overlaps(playerTwo)) {
             directionX = -1;
+            directionY = ((ball.y + 5) - (playerTwo.y + 40)) / 40;
         }
 
         if (ball.y < 0 || ball.y > 480) {
@@ -154,13 +154,18 @@ public class GameScreen implements Screen {
 
         if (ball.x < 0) {
             playerTwoScore++;
-            ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
+            resetBall();
         }
 
         if (ball.x > 800) {
             playerOneScore++;
-            ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
+            resetBall();
         }
+    }
+
+    private void resetBall() {
+        ball.setPosition(800 / 2 - 5, 480 / 2 - 5);
+        directionY = 0;
     }
 
     private void controlPlayerTwo() {
