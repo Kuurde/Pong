@@ -16,6 +16,7 @@ public class GameScreen implements Screen {
     private static final int BALL_SPEED = 300;
     private static final int Y_MIN = 0;
     private static final int Y_MAX = 400;
+    private static final int WINNING_SCORE = 5;
 
     private Pong game;
     private SpriteBatch batch;
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
         moveBall();
         controlPlayerTwo();
         drawScore();
+        checkWinner();
     }
 
     @Override
@@ -137,15 +139,18 @@ public class GameScreen implements Screen {
     }
 
     private void moveBall() {
+        // Move ball
         ball.x += directionX * BALL_SPEED * Gdx.graphics.getDeltaTime();
         ball.y += directionY * BALL_SPEED * Gdx.graphics.getDeltaTime();
 
         if (ball.overlaps(playerOne)) {
+            // Bounce ball and calculate new angle
             directionX = 1;
             directionY = ((ball.y + 5) - (playerOne.y + 40)) / 40;
         }
 
         if (ball.overlaps(playerTwo)) {
+            // Bounce ball and calculate new angle
             directionX = -1;
             directionY = ((ball.y + 5) - (playerTwo.y + 40)) / 40;
         }
@@ -171,6 +176,7 @@ public class GameScreen implements Screen {
     }
 
     private void controlPlayerTwo() {
+        // Follow the ball
         if (playerTwo.y > ball.y) {
             playerTwo.y -= PLAYER_SPEED * Gdx.graphics.getDeltaTime();
         }
@@ -178,7 +184,7 @@ public class GameScreen implements Screen {
         if (playerTwo.y < ball.y) {
             playerTwo.y += PLAYER_SPEED * Gdx.graphics.getDeltaTime();
             if (playerTwo.y > 400) {
-                playerTwo.y = 400;
+                playerTwo.y = 400; // Make sure player stays within the field
             }
         }
     }
@@ -190,5 +196,17 @@ public class GameScreen implements Screen {
         font.draw(batch, String.valueOf(playerTwoScore), 430, 450);
 
         batch.end();
+    }
+
+    private void checkWinner() {
+        if (playerOneScore == WINNING_SCORE) {
+            game.getScreen().dispose();
+            game.setScreen(new EndGameScreen(game, true));
+        }
+
+        if (playerTwoScore == WINNING_SCORE) {
+            game.getScreen().dispose();
+            game.setScreen(new EndGameScreen(game, false));
+        }
     }
 }

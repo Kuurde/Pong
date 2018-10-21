@@ -15,8 +15,7 @@ public class Pong extends Game {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
-//		this.setScreen(new MainMenuScreen(this));
-		this.setScreen(new EndGameScreen(this, false));
+		this.setScreen(new MainMenuScreen(this));
 	}
 
 	@Override

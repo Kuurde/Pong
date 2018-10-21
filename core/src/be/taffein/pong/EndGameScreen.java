@@ -1,6 +1,7 @@
 package be.taffein.pong;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,6 +24,7 @@ public class EndGameScreen implements Screen {
         this.batch = game.getBatch();
         this.shapeRenderer = game.getShapeRenderer();
         this.font = game.getFont();
+        this.font.getData().setScale(1);
         this.won = won;
 
         camera = new OrthographicCamera();
@@ -45,8 +47,6 @@ public class EndGameScreen implements Screen {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        drawYou();
-
         if (won) {
             drawWin();
         } else {
@@ -54,68 +54,99 @@ public class EndGameScreen implements Screen {
         }
 
         shapeRenderer.end();
-    }
 
-    private void drawYou() {
-        // Y
-        shapeRenderer.rect(40, 0, 20, 80);
-        shapeRenderer.rect(20, 80, 20, 20);
-        shapeRenderer.rect(0, 100, 20, 20);
-        shapeRenderer.rect(60, 80, 20, 20);
-        shapeRenderer.rect(80, 100, 20, 20);
+        batch.begin();
+        font.draw(batch, "Press R to play again", 200, 60);
+        font.draw(batch, "Press ESC to go back to the main menu", 200, 30);
+        batch.end();
 
-        // O
-        shapeRenderer.rect(140, 0, 40, 20);
-        shapeRenderer.rect(120, 20, 20, 60);
-        shapeRenderer.rect(180, 20, 20, 60);
-        shapeRenderer.rect(140, 80, 40, 20);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            game.getScreen().dispose();
+            game.setScreen(new GameScreen(game));
+        }
 
-        // U
-        shapeRenderer.rect(240, 0, 60, 20);
-        shapeRenderer.rect(220, 20, 20, 80);
-        shapeRenderer.rect(280, 20, 20, 80);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            game.getScreen().dispose();
+            game.setScreen(new MainMenuScreen(game));
+        }
     }
 
     private void drawWin() {
+        // Y
+        shapeRenderer.rect(130, 200, 20, 80);
+        shapeRenderer.rect(110, 280, 20, 20);
+        shapeRenderer.rect(90, 300, 20, 20);
+        shapeRenderer.rect(150, 280, 20, 20);
+        shapeRenderer.rect(170, 300, 20, 20);
+
+        // O
+        shapeRenderer.rect(230, 200, 40, 20);
+        shapeRenderer.rect(210, 220, 20, 60);
+        shapeRenderer.rect(270, 220, 20, 60);
+        shapeRenderer.rect(230, 280, 40, 20);
+
+        // U
+        shapeRenderer.rect(330, 200, 60, 20);
+        shapeRenderer.rect(310, 220, 20, 80);
+        shapeRenderer.rect(370, 220, 20, 80);
+
         // W
-        shapeRenderer.rect(400, 0, 80, 20);
-        shapeRenderer.rect(380, 20, 20, 80);
-        shapeRenderer.rect(420, 20, 20, 40);
-        shapeRenderer.rect(460, 20, 20, 80);
+        shapeRenderer.rect(490, 200, 80, 20);
+        shapeRenderer.rect(470, 220, 20, 80);
+        shapeRenderer.rect(510, 220, 20, 40);
+        shapeRenderer.rect(550, 220, 20, 80);
 
         // I
-        shapeRenderer.rect(500, 0, 20, 80);
-        shapeRenderer.rect(500, 100, 20, 20);
+        shapeRenderer.rect(590, 200, 20, 80);
+        shapeRenderer.rect(590, 300, 20, 20);
 
         // N
-        shapeRenderer.rect(540, 0, 20, 100);
-        shapeRenderer.rect(560, 80, 40, 20);
-        shapeRenderer.rect(600, 0, 20, 80);
+        shapeRenderer.rect(630, 200, 20, 100);
+        shapeRenderer.rect(650, 280, 40, 20);
+        shapeRenderer.rect(690, 200, 20, 80);
     }
 
     private void drawLose() {
-        // L
-        shapeRenderer.rect(380, 0, 20, 120);
+        // Y
+        shapeRenderer.rect(90, 200, 20, 80);
+        shapeRenderer.rect(70, 280, 20, 20);
+        shapeRenderer.rect(50, 300, 20, 20);
+        shapeRenderer.rect(110, 280, 20, 20);
+        shapeRenderer.rect(130, 300, 20, 20);
 
         // O
-        shapeRenderer.rect(440, 0, 40, 20);
-        shapeRenderer.rect(420, 20, 20, 60);
-        shapeRenderer.rect(480, 20, 20, 60);
-        shapeRenderer.rect(440, 80, 40, 20);
+        shapeRenderer.rect(190, 200, 40, 20);
+        shapeRenderer.rect(170, 220, 20, 60);
+        shapeRenderer.rect(230, 220, 20, 60);
+        shapeRenderer.rect(190, 280, 40, 20);
+
+        // U
+        shapeRenderer.rect(290, 200, 60, 20);
+        shapeRenderer.rect(270, 220, 20, 80);
+        shapeRenderer.rect(330, 220, 20, 80);
+
+        // L
+        shapeRenderer.rect(430, 200, 20, 120);
+
+        // O
+        shapeRenderer.rect(490, 200, 40, 20);
+        shapeRenderer.rect(470, 220, 20, 60);
+        shapeRenderer.rect(530, 220, 20, 60);
+        shapeRenderer.rect(490, 280, 40, 20);
 
         // S
-        shapeRenderer.rect(520,0, 60, 20);
-        shapeRenderer.rect(580,20, 20, 20);
-        shapeRenderer.rect(540, 40, 40, 20);
-        shapeRenderer.rect(520, 60, 20, 20);
-        shapeRenderer.rect(540, 80, 60, 20);
+        shapeRenderer.rect(570,200, 60, 20);
+        shapeRenderer.rect(630,220, 20, 20);
+        shapeRenderer.rect(590, 240, 40, 20);
+        shapeRenderer.rect(570, 260, 20, 20);
+        shapeRenderer.rect(590, 280, 60, 20);
 
         // E
-        shapeRenderer.rect(640, 0, 60, 20);
-        shapeRenderer.rect(620, 20, 20, 60);
-        shapeRenderer.rect(640, 40, 40, 20);
-        shapeRenderer.rect(640, 80, 60, 20);
-        shapeRenderer.rect(680, 60, 20, 20);
+        shapeRenderer.rect(690, 200, 60, 20);
+        shapeRenderer.rect(670, 220, 20, 60);
+        shapeRenderer.rect(690, 240, 40, 20);
+        shapeRenderer.rect(690, 280, 60, 20);
+        shapeRenderer.rect(730, 260, 20, 20);
     }
 
     @Override

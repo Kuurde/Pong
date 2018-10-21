@@ -23,6 +23,7 @@ public class MainMenuScreen implements Screen {
         this.batch = game.getBatch();
         this.shapeRenderer = game.getShapeRenderer();
         this.font = game.getFont();
+        this.font.getData().setScale(1);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
@@ -48,7 +49,7 @@ public class MainMenuScreen implements Screen {
         font.draw(batch, "Press any key to start", 320, 30);
         batch.end();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             game.getScreen().dispose();
             game.setScreen(new GameScreen(game));
         }
